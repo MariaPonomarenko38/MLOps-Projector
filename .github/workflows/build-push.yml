@@ -54,7 +54,7 @@ jobs:
 
       - name: Deploy application
         run: |
-          kubectl create -f k8s-resources/deployment-app-web.yml
+          kubectl create -f k8s_resources/deployment-app-web.yml
       - name: Print pods
         run: |
           sleep 5 && kubectl get pod -A
@@ -87,7 +87,7 @@ jobs:
         kubectl config use-context kind-kind
     - name: Deploy application
       run: |
-        kubectl create -f k8s-resources/job-app-ml.yml
+        kubectl create -f k8s_resources/job-app-ml.yml
     - name: Print pods
       run: |
         sleep 5 && kubectl get pod -A
