@@ -58,9 +58,9 @@ jobs:
       - name: Print pods
         run: |
           sleep 5 && kubectl get pod -A
-      - name: Print pods
+      - name: Run test
         run: |
-          kubectl wait --for=condition=available --timeout=90s deployment/deployments-app-web
+          sleep 5 && kubectl wait --for=condition=available --timeout=300s deployment/deployments-app-web
       - name: Print pods
         run: |
           sleep 5 && kubectl get pod -A
@@ -91,9 +91,9 @@ jobs:
     - name: Print pods
       run: |
         sleep 5 && kubectl get pod -A
-    - name: Run tests
+    - name: Run test
       run: |
-        kubectl wait --for=condition=complete --timeout=90s job/job-app-ml
+        sleep 5 && kubectl wait --for=condition=complete --timeout=300s job/job-app-ml
     - name: Print pods
       run: |
         sleep 5 && kubectl get pod -A
