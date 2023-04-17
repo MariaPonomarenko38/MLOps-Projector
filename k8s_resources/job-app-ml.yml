@@ -8,8 +8,7 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-        - image: | 
-            ${{ secrets.DOCKER_USERNAME }}/app_ml:latest
+        - image: mariaponomarenko/app_ml:latest
           name: job-app-ml
           
           
