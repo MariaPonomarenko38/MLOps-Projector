@@ -4,5 +4,8 @@ metadata:
   name: pod-app-ml
 spec:
   containers:
-    - image: mariaponomarenko/app_ml:latest
+    - image: | 
+        ${{ secrets.DOCKER_USERNAME }}/app_ml:latest
       name: pod-app-ml
+      
+      
