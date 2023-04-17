@@ -4,5 +4,5 @@ metadata:
   name: pod-app-web
 spec:
   containers:
-    - image: ${{ secrets.DOCKER_USERNAME }}/app_web:latest
+    - image: mariaponomarenko/app_web:latest
       name: pod-app-web

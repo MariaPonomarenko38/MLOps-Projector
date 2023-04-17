@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: app-web
-          image: ${{ secrets.DOCKER_USERNAME }}/app_web:latest 
+          image: mariaponomarenko/app_web:latest 
 ---
 apiVersion: v1
 kind: Service
