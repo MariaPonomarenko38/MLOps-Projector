@@ -43,7 +43,7 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_WEB_APP }}:latest
 
-    k8s-test-deployment-action:
+  k8s-test-deployment-action:
     runs-on: ubuntu-latest
     steps:
       - name: Create k8s Kind Cluster
@@ -65,9 +65,9 @@ jobs:
         run: |
           sleep 5 && kubectl get pod -A
 
-    k8s-test-job-cli:
-      runs-on: ubuntu-latest
-      steps:
+  k8s-test-job-cli:
+    runs-on: ubuntu-latest
+    steps:
       - name: Check out code
         uses: actions/checkout@v2
 
