@@ -3,14 +3,6 @@ import json
 import os
 from minio.error import S3Error
 
-with open('minio_deployment/secrets.json', 'r') as f:
-    data = json.load(f)
-
-ACCESS_KEY = data["ACCESS_KEY"]
-SECRET_KEY = data["SECRET_KEY"]
-ENDPOINT = data["ENDPOINT"]
-
-
 class MinioClient:
     def __init__(self, access_key, secret_key, endpoint) -> None:
         client = Minio(endpoint, access_key=access_key, secret_key=secret_key, secure=False)

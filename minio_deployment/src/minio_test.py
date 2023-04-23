@@ -1,12 +1,10 @@
 import os
-import pytest
-from minio import Minio
 from minio.error import S3Error
 import json
 from minio_client import MinioClient
 import unittest
 import shutil
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 bucket_name = 'test-bucket'
 object_name = 'test-object'
@@ -44,12 +42,9 @@ class MockTestsMinioClient(unittest.TestCase):
 
 class TestMinioClientIntegration(unittest.TestCase):
     def setUp(self):
-
-        with open('minio_deployment/secrets.json', 'r') as f:
-            data = json.load(f)
-        self.access_key = data["ACCESS_KEY"]
-        self.secret_key = data["SECRET_KEY"]
-        self.endpoint = data["ENDPOINT"]  
+        self.access_key = os.environ.get("AWS_ACCESS_KEY_ID")
+        self.secret_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
+        self.endpoint = os.environ.get("AWS_ENDPOINT")
         self.client = MinioClient(self.access_key, self.secret_key, self.endpoint)
     
     def test_upload_file(self):
