@@ -9,7 +9,7 @@ env:
   IMAGE_ML_APP: app_ml
   IMAGE_WEB_APP: app_web
   IMAGE_MINIO: minio-client
-  IMAGE_MINIO_FOLDER: minio-deployment
+  IMAGE_MINIO_FOLDER: minio_deployment
 
 jobs:
   build-and-push-app-ml:
