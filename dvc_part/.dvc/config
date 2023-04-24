@@ -1,0 +1,6 @@
+['remote "minio"']
+    url = s3://solar-panels-dusty
+    endpointurl = http://localhost:9000
+['remote "minio1"']
+    url = s3://solar-panels-clean
+    endpointurl = http://localhost:9000
