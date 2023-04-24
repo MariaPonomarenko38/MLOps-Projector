@@ -12,6 +12,10 @@ ENV AWS_ENDPOINT=0.0.0.0:9000
 ENV AWS_SECRET_ACCESS_KEY=minioadmin
 ENV AWS_ACCESS_KEY_ID=minioadmin
 
+RUN apt-get update && apt-get install -y curl && \
+    curl -fsSL https://get.docker.com -o get-docker.sh && \
+    sh get-docker.sh
+
 RUN pip install awscli
 
 RUN aws s3 ls --endpoint-url http://0.0.0.0:9000
