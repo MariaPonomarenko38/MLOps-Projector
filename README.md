@@ -1,6 +1,6 @@
 # MLOps-Projector
 
-## 1. Deploying Minio
+## 1. Deploying Minio on K8S
 
 1. Start cluster using minikube:
 ```
@@ -32,4 +32,20 @@ aws s3 ls --endpoint-url %AWS_ENDPOINT%
 6. Create test bucket
 ```
 aws s3api create-bucket --bucket test --endpoint-url %AWS_ENDPOINT%
+```
+
+## 2. Deploying Minio locally (Windows)
+
+1. Install the MinIO server:
+
+https://dl.min.io/server/minio/release/windows-amd64/minio.exe
+
+2. Set MinIO credentials:
+```
+set MINIO_ROOT_USER=minioadmin
+set MINIO_ROOT_PASSWORD=minioadmin
+```
+3. Start minio server on "/home/shared" directory.
+```
+C:\> minio.exe server /home/shared
 ```
