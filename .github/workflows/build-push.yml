@@ -9,6 +9,7 @@ env:
   IMAGE_ML_APP: app_ml
   IMAGE_WEB_APP: app_web
 
+
 jobs:
   build-and-push-app-ml:
     runs-on: ubuntu-latest
