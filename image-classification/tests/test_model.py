@@ -29,6 +29,7 @@ def test_train_to_completion(args):
     assert (result_path).exists()
 
 def test_minimum_functionality(args):
-    predict(args["processed_path_data"] + 'test_features.npy', args["path_to_save_model"], args["results_path"])
-    results = np.load( args["results_path"])
-    assert results[0] == 1
+    predict(args["processed_path_data"] + 'test_features.npy', args["path_to_retrieve_model"], args["results_path"])
+    predicted_label = np.load(args["results_path"])[0]
+    correct_label = np.load(args["interim_path_data"] + 'test_labels.npy')[0]
+    assert predicted_label == correct_label

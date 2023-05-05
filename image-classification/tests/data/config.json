@@ -18,5 +18,6 @@
     "class_names": ["dusty", "clean"],
     "use_wandb": false,
     "path_to_save_model": "./test_data/model.h5",
-    "results_path": "./result.npy"
+    "results_path": "./result.npy",
+    "path_to_retrieve_model": "../models/model.h5"
 }
