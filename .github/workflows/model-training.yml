@@ -3,7 +3,7 @@ name: homework-2
 on:
   pull_request:
     branches:
-      - model-train
+      - model_train
 
 env:
   IMAGE_ML_APP: image-classification
