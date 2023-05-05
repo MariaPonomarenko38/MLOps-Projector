@@ -1,0 +1,8 @@
+{
+    "method": "grid",
+    "parameters": {
+        "layers": {
+            "values": [32, 64, 96, 128, 256]
+        }
+    }
+}
