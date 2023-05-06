@@ -5,8 +5,8 @@ from image_classification.train import get_model, train
 from image_classification.predict import predict
 from image_classification.utils import load_h5
 
-def test_overfit_batch(data_testing, args):
-    train_features, train_labels, test_features, test_labels = data_testing
+def test_overfit_batch(processed_data, args):
+    train_features, train_labels, test_features, test_labels = processed_data
     model = get_model(args)
     datagen = ImageDataGenerator(
             rotation_range=20,
