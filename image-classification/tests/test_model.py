@@ -19,7 +19,7 @@ def test_overfit_batch(processed_data, args):
 
     history = model.fit(datagen.flow(train_features, train_labels, batch_size=args["batch_size"], shuffle=True), epochs=args["epochs"], validation_data=(test_features, test_labels))
     
-    assert history.history['loss'][-1] < 0.6
+    assert history.history['loss'][-1] < 0.01
 
 def test_train_to_completion(args):
     train('./data/config.json')
