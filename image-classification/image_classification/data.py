@@ -47,14 +47,18 @@ def get_data(path_to_args):
     save_in_h5(args["interim_path_data"] + "train_labels.h5", train_labels)
     save_in_h5(args["interim_path_data"] + "test_labels.h5", test_labels)
 
+def get_features(args, images):
+    model = MobileNet(input_shape=tuple(args["mobile_net_input_shape"]), weights='imagenet', include_top=False)
+    features = model.predict(images)
+    return features
+
 def process_data(path_to_args):
     args = get_args(path_to_args)
     train_images = load_h5(args["interim_path_data"] + "train_images.h5")
     test_images = load_h5(args["interim_path_data"] + "test_images.h5")
 
-    model = MobileNet(input_shape=tuple(args["mobile_net_input_shape"]), weights='imagenet', include_top=False)
-    train_features = model.predict(train_images)
-    test_features = model.predict(test_images)
+    train_features = get_features(args, train_images)
+    test_features = get_features(args, test_images)
 
     save_in_h5(args["processed_path_data"] + 'train_features.h5', train_features)
     save_in_h5(args["processed_path_data"] + 'test_features.h5', test_features)
