@@ -15,7 +15,7 @@ def eval_pred():
 
 def test_compute_metrics(eval_pred):
     
-    expected_result = {"f1": 1, "f0.5": 1}
+    expected_result = {"f1": 1, "f0.5": 1, "accuracy": 1}
     
     result = compute_metrics(predictions=eval_pred[0], labels=eval_pred[1])
 
