@@ -4,9 +4,12 @@ from keras.applications.vgg16 import VGG16
 from keras.applications import MobileNet
 import numpy as np
 import os
+from dotenv import load_dotenv
 import json
 from sklearn.utils import shuffle
-from image_classification.utils import get_args  
+from image_classification.utils import * 
+
+load_dotenv()
 
 def preprocessing(img_path, image_size):
     image = cv2.imread(img_path)
@@ -35,23 +38,23 @@ def load_data(path_to_folder, class_names, image_size):
 def get_data(path_to_args):
     args = get_args(path_to_args)
 
-    (train_images, train_labels)  = load_data(args["path_to_data"] + 'Train1', args["class_names"], args["image_size"])
-    (test_images, test_labels)  = load_data(args["path_to_data"] + 'Test1', args["class_names"], args["image_size"])
+    (train_images, train_labels)  = load_data(os.environ.get('TRAIN_FOLDER'), args["class_names"], args["image_size"])
+    (test_images, test_labels)  = load_data(os.environ.get('TEST_FOLDER'), args["class_names"], args["image_size"])
     train_images, train_labels = shuffle(train_images, train_labels, random_state=25)
     
-    np.save(args["interim_path_data"] + "train_images.npy", train_images)
-    np.save(args["interim_path_data"] + "test_images.npy", test_images)
-    np.save(args["interim_path_data"] + "train_labels.npy", train_labels)
-    np.save(args["interim_path_data"] + "test_labels.npy", test_labels)
+    save_in_h5(args["interim_path_data"] + "train_images.h5", train_images)
+    save_in_h5(args["interim_path_data"] + "test_images.h5", test_images)
+    save_in_h5(args["interim_path_data"] + "train_labels.h5", train_labels)
+    save_in_h5(args["interim_path_data"] + "test_labels.h5", test_labels)
 
 def process_data(path_to_args):
     args = get_args(path_to_args)
-    train_images = np.load(args["interim_path_data"] + "train_images.npy")
-    test_images = np.load(args["interim_path_data"] + "test_images.npy")
+    train_images = load_h5(args["interim_path_data"] + "train_images.h5")
+    test_images = load_h5(args["interim_path_data"] + "test_images.h5")
 
     model = MobileNet(input_shape=tuple(args["mobile_net_input_shape"]), weights='imagenet', include_top=False)
     train_features = model.predict(train_images)
     test_features = model.predict(test_images)
 
-    np.save(args["processed_path_data"] + 'train_features.npy', train_features)
-    np.save(args["processed_path_data"] + 'test_features.npy', test_features)
+    save_in_h5(args["processed_path_data"] + 'train_features.h5', train_features)
+    save_in_h5(args["processed_path_data"] + 'test_features.h5', test_features)
