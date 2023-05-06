@@ -1,8 +1,7 @@
 import pytest
-from image_classification.data import load_data
+from image_classification.data import load_data, get_features
+from image_classification.utils import save_in_h5
 import json 
-import numpy as np
-
 
 @pytest.fixture(scope="session")
 def args():
@@ -12,19 +11,20 @@ def args():
     return args
 
 @pytest.fixture(scope="session")
-def data():
-    with open('./data/config.json') as f:
-        args = json.load(f)
+def raw_data(args):
     (train_images, train_labels) = load_data(args["path_to_data"] + 'Train', args["class_names"], args["image_size"])
     (test_images, test_labels) = load_data(args["path_to_data"] + 'Test', args["class_names"], args["image_size"])
 
     return train_images, train_labels, test_images, test_labels
 
 @pytest.fixture(scope="session")
-def data_testing():
-    train_features = np.load('./test_data/test_processed_data/train_features.npy')
-    test_features = np.load('./test_data/test_processed_data/test_features.npy')
-    train_labels =  np.load('./test_data/test_interim_data/train_labels.npy')
-    test_labels =  np.load('./test_data/test_interim_data/test_labels.npy')
+def processed_data(args, raw_data):
+    train_images, train_labels, test_images, test_labels = raw_data
+    train_features = get_features(args, train_images)
+    test_features = get_features(args, test_images)
 
+    save_in_h5(args["interim_path_data"] + 'train_labels.h5', train_labels)
+    save_in_h5(args["interim_path_data"] + 'test_labels.h5', test_labels)
+    save_in_h5(args["processed_path_data"] + 'train_features.h5', train_features)
+    save_in_h5(args["processed_path_data"] + 'test_features.h5', test_features)
     return train_features, train_labels, test_features, test_labels
