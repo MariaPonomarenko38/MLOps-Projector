@@ -2,7 +2,6 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import tensorflow as tf    
 import wandb
 from wandb.keras import WandbCallback
-from tensorflow.keras import regularizers
 import wandb
 import logging
 from image_classification.utils import *
@@ -16,9 +15,9 @@ logger = logging.getLogger(__name__)
 def get_model(args):
     model = tf.keras.Sequential([
         tf.keras.layers.Flatten(input_shape = tuple(args["input_shape"])),
-        tf.keras.layers.Dense(args["layers"], activation=args["activation"], kernel_regularizer=regularizers.l2(0.001)),
+        tf.keras.layers.Dense(args["layers"], activation=args["activation"]),
         tf.keras.layers.Dropout(0.2),
-        tf.keras.layers.Dense(args["number_of_classes"], activation=args["activation1"], kernel_regularizer=regularizers.l2(0.001))
+        tf.keras.layers.Dense(args["number_of_classes"], activation=args["activation1"])
     ])
 
     model.compile(optimizer=args["optimizer"], loss=args["loss"], metrics=['accuracy'])
