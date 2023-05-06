@@ -7,7 +7,7 @@ from image_classification.utils import compute_metrics
 
 @pytest.fixture()
 def eval_pred():
-    predictions = np.array([[0.1, 0.9], [0.8, 0.2], [0.3, 0.7]])
+    predictions = np.array([[0.1,  0.9], [0.8, 0.2], [0.3, 0.7]])
     labels = np.array([1, 0, 1])
 
     _eval_pred = (predictions, labels)
