@@ -9,6 +9,6 @@ def test_data_shape(raw_data):
 def test_data_pixel_range(raw_data):
     train_images, _, test_images, _ = raw_data
     for image in train_images:
-        assert np.all(np.logical_and(image >= 0, image <= 255))
+        assert np.all(np.logical_and(image >= 0, image <= 1))
     for image in test_images:
-        assert np.all(np.logical_and(image >= 0, image <= 255))
+        assert np.all(np.logical_and(image >= 0, image <= 1))
