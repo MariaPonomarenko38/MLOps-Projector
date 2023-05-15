@@ -3,6 +3,7 @@ import json
 import os
 import datetime
 from minio.error import S3Error
+from pathlib import Path
 
 class MinioClient:
     def __init__(self, access_key, secret_key, endpoint) -> None:
@@ -21,11 +22,11 @@ class MinioClient:
         print(type(last_modified))
 
     def upload_folder(self, bucket_name, folder_path):
-        for root, dirs, files in os.walk(folder_path):
-            for file in files:
-                file_path = os.path.join(root, file)
-                object_name = os.path.relpath(file_path, folder_path)
-                self.upload_file(object_name, bucket_name, file_path)
+        folder_path = Path(folder_path)
+        for file_path in folder_path.glob('**/*'):
+            if file_path.is_file():
+                object_name = file_path.relative_to(folder_path).as_posix()
+                self.upload_file(object_name, bucket_name, str(file_path))
 
     def download_folder(self, bucket_name, download_path):
         objects = self.client.list_objects(bucket_name)
@@ -44,3 +45,6 @@ class MinioClient:
             
     def delete_object(self, object_name, bucket_name):
         self.client.remove_object(bucket_name, object_name)
+
+c = MinioClient('minioadmin', 'minioadmin', '172.26.128.1:9000/')
+c.upload_folder('haha', 'C:/projector/project_clean/kk/')

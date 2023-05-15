@@ -46,6 +46,7 @@ class TestMinioClientIntegration(unittest.TestCase):
         self.secret_key = os.environ.get("AWS_SECRET_ACCESS_KEY")
         self.endpoint = os.environ.get("AWS_ENDPOINT")
         self.client = MinioClient(self.access_key, self.secret_key, self.endpoint)
+        self.file_path = "/tmp/test-download-file.csv"
     
     def test_upload_file(self):
 
@@ -64,14 +65,12 @@ class TestMinioClientIntegration(unittest.TestCase):
 
     def test_download_file(self):
         
-        object_name = "data.csv"
+        object_name = "data_test.csv"
         bucket_name = "test"
-        file_path = "/tmp/test-download-file.csv"
+        
+        self.client.download_file(object_name, bucket_name, self.file_path)
 
-        tmp_file_path = '/tmp/test-download-file.csv'
-        self.client.download_file(object_name,bucket_name, tmp_file_path)
-
-        with open(file_path, 'rb') as f1, open(tmp_file_path, 'rb') as f2:
+        with open(self.file_path, 'rb') as f1, open(self.file_path, 'rb') as f2:
             self.assertEqual(f1.read(), f2.read())
         
         shutil.rmtree('/tmp')
@@ -86,12 +85,11 @@ class TestMinioClientIntegration(unittest.TestCase):
 
     def test_download_file_error(self):
         
-        object_name = "data.csv"
-        bucket_name = "no_bucket"
+        object_name = "file.txt"
+        bucket_name = "test"
 
-        tmp_file_path = '/tmp/test-download-file.csv'
         with self.assertRaises(S3Error):
-            self.client.download_file(object_name,bucket_name, tmp_file_path)
+            self.client.download_file(object_name,bucket_name, self.file_path)
 
     def test_delete_object(self):
 
