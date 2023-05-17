@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: basic-pipeline-
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.19, pipelines.kubeflow.org/pipeline_compilation_time: '2023-05-15T22:14:33.816404',
+    pipelines.kubeflow.org/pipeline_spec: '{"description": "A basic Kubeflow Pipeline",
+      "name": "Basic Pipeline"}'}
+  labels: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.19}
+spec:
+  entrypoint: basic-pipeline
+  templates:
+  - name: basic-pipeline
+    dag:
+      tasks:
+      - {name: echo, template: echo}
+      - {name: echo-2, template: echo-2}
+  - name: echo
+    container:
+      command: [echo, 'Hello, World!']
+      image: alpine:3.12
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.19
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+  - name: echo-2
+    container:
+      command: [echo, This is the second step]
+      image: alpine:3.12
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.19
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+  arguments:
+    parameters: []
+  serviceAccountName: pipeline-runner

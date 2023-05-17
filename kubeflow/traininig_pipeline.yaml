@@ -1,0 +1,72 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: traininig-pipeline-
+  annotations: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.19, pipelines.kubeflow.org/pipeline_compilation_time: '2023-05-16T21:19:47.197654',
+    pipelines.kubeflow.org/pipeline_spec: '{"description": "traininig_pipeline", "name":
+      "traininig_pipeline"}'}
+  labels: {pipelines.kubeflow.org/kfp_sdk_version: 1.8.19}
+spec:
+  entrypoint: traininig-pipeline
+  templates:
+  - name: load-data
+    container:
+      command: [python, simple_model/cli.py, load-data]
+      image: mariaponomarenko/simple_model:latest
+    outputs:
+      parameters:
+      - name: load-data-x_test
+        valueFrom: {path: X_test.csv}
+      - name: load-data-x_train
+        valueFrom: {path: X_train.csv}
+      - name: load-data-y_test
+        valueFrom: {path: y_test.csv}
+      - name: load-data-y_train
+        valueFrom: {path: y_train.csv}
+      artifacts:
+      - {name: load-data-x_test, path: X_test.csv}
+      - {name: load-data-x_train, path: X_train.csv}
+      - {name: load-data-y_test, path: y_test.csv}
+      - {name: load-data-y_train, path: y_train.csv}
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.19
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+      annotations: {pipelines.kubeflow.org/max_cache_staleness: P0D}
+  - name: train-model
+    container:
+      args: [--X_train, '{{inputs.parameters.load-data-x_train}}', --y_train, '{{inputs.parameters.load-data-y_train}}',
+        --X_test, '{{inputs.parameters.load-data-x_test}}', --y_test, '{{inputs.parameters.load-data-y_test}}']
+      command: [python, simple_model/cli.py, train]
+      image: mariaponomarenko/simple_model:latest
+    inputs:
+      parameters:
+      - {name: load-data-x_test}
+      - {name: load-data-x_train}
+      - {name: load-data-y_test}
+      - {name: load-data-y_train}
+    outputs:
+      artifacts:
+      - {name: train-model-model, path: model.joblib}
+    metadata:
+      labels:
+        pipelines.kubeflow.org/kfp_sdk_version: 1.8.19
+        pipelines.kubeflow.org/pipeline-sdk-type: kfp
+        pipelines.kubeflow.org/enable_caching: "true"
+  - name: traininig-pipeline
+    dag:
+      tasks:
+      - {name: load-data, template: load-data}
+      - name: train-model
+        template: train-model
+        dependencies: [load-data]
+        arguments:
+          parameters:
+          - {name: load-data-x_test, value: '{{tasks.load-data.outputs.parameters.load-data-x_test}}'}
+          - {name: load-data-x_train, value: '{{tasks.load-data.outputs.parameters.load-data-x_train}}'}
+          - {name: load-data-y_test, value: '{{tasks.load-data.outputs.parameters.load-data-y_test}}'}
+          - {name: load-data-y_train, value: '{{tasks.load-data.outputs.parameters.load-data-y_train}}'}
+  arguments:
+    parameters: []
+  serviceAccountName: pipeline-runner
