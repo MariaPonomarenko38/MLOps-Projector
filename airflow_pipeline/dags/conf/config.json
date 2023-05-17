@@ -1,0 +1,15 @@
+{
+    "input_dim": 10000, 
+    "output_dim": 64, 
+    "input_length": 100,
+    "num_words": 1000,
+    "epochs": 3,
+    "dropout_rate": 0.5,
+    "optimizer": "adam",
+    "loss": "binary_crossentropy",
+    "model_name": "sentiment_analysis_model.h5",
+    "wandb_project": "test-project",
+    "train_bucket": "data",
+    "inference_bucket": "inference",
+    "inference_model_name": "sentiment_analysis_model.h5:v2"
+}
