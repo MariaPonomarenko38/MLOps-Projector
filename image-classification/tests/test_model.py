@@ -21,8 +21,8 @@ def test_overfit_batch(processed_data, args):
     
     assert history.history['loss'][-1] < 0.1
 
-def test_train_to_completion(args):
-    train('./data/config.json')
+def test_train_to_completion(args_path, args):
+    train(args_path)
     result_path = Path(args["path_to_save_model"])
     assert (result_path).exists()
 

@@ -11,6 +11,11 @@ def args():
     return args
 
 @pytest.fixture(scope="session")
+def args_path():
+    path = './data/config.json'
+    return path
+
+@pytest.fixture(scope="session")
 def raw_data(args):
     (train_images, train_labels) = load_data(args["path_to_data"] + 'Train', args["class_names"], args["image_size"])
     (test_images, test_labels) = load_data(args["path_to_data"] + 'Test', args["class_names"], args["image_size"])
