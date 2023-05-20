@@ -19,11 +19,18 @@ def compute_metrics(predictions, labels):
         "accuracy": accuracy_score(y_true=labels, y_pred=preds),
     }
 
-def upload_to_registry(path_to_config):
-    args = get_args(path_to_config)
-    art = wandb.Artifact(args["model_name_save"], type="model")
-    art.add_file(args["model_path"] + args["model_name_save"])
-    wandb.log_artifact(art)
+def upload_to_registry(model_name, model_path):
+    with wandb.init() as _:
+        art = wandb.Artifact(model_name, type="model")
+        art.add_file(model_path)
+        art.add_file("../conf/config.json")
+        wandb.log_artifact(art)
+
+def load_from_registry(model_name, model_path):
+    with wandb.init() as run:
+        artifact = run.use_artifact(model_name, type="model")
+        artifact_dir = artifact.download(root=model_path)
+        print(f"{artifact_dir}")
 
 def get_args(path_to_args):
     with open(path_to_args) as f:
@@ -47,3 +54,6 @@ def load_h5(path):
         dset = f['myarray']
         arr = np.array(dset)
     return arr
+
+if __name__ == '__main__':
+    load_from_registry('../conf/config.json')
