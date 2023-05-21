@@ -1,0 +1,8 @@
+wandb==0.15.3
+numpy==1.23.5
+filelock==3.4.1
+streamlit==1.22.0
+keras==2.12.0
+protobuf==3.20.*
+altair==4.0
+keras-preprocessing==1.1.2
