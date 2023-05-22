@@ -1,0 +1,28 @@
+name: fastapi-app
+
+on:
+  pull_request:
+    branches:
+      - main
+env:
+  IMAGE_FASTAPI_APP: app-fastapi-test2
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v2
+
+      - name: Login 
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build 
+        run: |
+          docker build --tag ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_FASTAPI_APP }}:latest -f Dockerfile.ci ./api_serving
+      - name: Test Api
+        run: |
+          docker run -e WANDB_API_KEY=${{ secrets.WANDB_API_KEY }} ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_FASTAPI_APP }}:latest pytest --disable-warnings -rc test-fastapi-app.py
+      - name: Push 
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_FASTAPI_APP }}:latest
