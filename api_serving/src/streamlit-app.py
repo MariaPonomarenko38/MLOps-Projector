@@ -15,8 +15,8 @@ def single_pred():
     input_sent = st.text_input("English sentence", value="This is example input")
     if st.button("Run inference"):
         st.write("Input:", input_sent)
-        pred = predictor.predict([input_sent])
-        st.write("Pred:", pred)
+        intent = predictor.predict([input_sent])
+        st.write("Intent:", intent)
 
 
 def main():

@@ -14,10 +14,6 @@ RUN pip install -r requirements.txt
 ENV PYTHONPATH /app
 COPY . . 
 
+WORKDIR /app/tests
+
 CMD [ "bash" ]
-
-FROM base AS app-streamlit
-CMD streamlit run --server.address 0.0.0.0 --server.port 8080 src/streamlit-app.py
-
-FROM base AS app-fastapi
-CMD uvicorn --host 0.0.0.0 --port 8080 --workers 4 src.fastapi_app:app

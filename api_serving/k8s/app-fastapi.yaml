@@ -1,36 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-streamlit
+  name: app-fastapi
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: app-streamlit
+      app: app-fastapi
   template:
     metadata:
       labels:
-        app: app-streamlit
+        app: app-fastapi
     spec:
       containers:
         - name: app-streamlit
-          image: mariaponomarenko/app-streamlit15:latest
+          image: mariaponomarenko/app-fastapi10:latest
           env:
           - name: WANDB_API_KEY
             valueFrom:
               secretKeyRef:
                 name: wandb
-                key: WANDB_API_KEY          
+                key: WANDB_API_KEY  
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-streamlit
+  name: app-fastapi
   labels:
-    app: app-streamlit
+    app: app-fastapi
 spec:
   ports:
   - port: 8080
     protocol: TCP
   selector:
-    app: app-streamlit
+    app: app-fastapi
