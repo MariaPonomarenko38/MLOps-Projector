@@ -1,5 +1,5 @@
 minio_deployment/secrets.json
-.env
+variables/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
