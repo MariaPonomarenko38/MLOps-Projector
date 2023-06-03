@@ -36,15 +36,16 @@ class Predictor:
         with open(model_load_path + 'tokenizer.pickle', 'rb') as handle:
             self.tokenizer  = pickle.load(handle)
         self.model = load_model(model_load_path + model_name)
+        config = open_json_file(MODEL_PATH + 'config.json')
+        self.class_names = config['class_names']
     
     def predict(self, text: List[str]):
-        config = open_json_file(MODEL_PATH + 'config.json')
-        class_names = config['class_names']
+        
         preprocessed_text = np.array([message.replace('\d+', '') for message in text])
         preprocessed_text = self.tokenizer.texts_to_sequences(preprocessed_text)
         preprocessed_text = pad_sequences(preprocessed_text, 25)
         predictions = np.argmax(self.model .predict(preprocessed_text), axis=1)
-        intents = [class_names[index] for index in predictions]
+        intents = [self.class_names[index] for index in predictions]
         return intents
     
     @classmethod
