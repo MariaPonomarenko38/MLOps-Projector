@@ -12,7 +12,4 @@ uvicorn==0.22.0
 pytest==7.3.1
 httpx==0.24.1
 seldon-core==1.14.1
-urllib3==1.26.5
-
-kserve==0.10.1
-urllib3>=1.26.8
+kserve
