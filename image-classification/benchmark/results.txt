@@ -1,0 +1,8 @@
+Folder: batch_size_9, Processing Time: 1.148 seconds
+Folder: batch_size_30, Processing Time: 2.848 seconds
+Folder: batch_size_60, Processing Time: 4.139 seconds
+Results:
+Median time: 2.848 seconds
+Average time: 2.711 seconds
+Minimum time: 1.148 seconds
+Maximum time: 4.139 seconds
