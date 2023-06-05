@@ -14,11 +14,6 @@ import tensorflow as tf
 import os
 from dotenv import load_dotenv
 import sys 
-
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-sys.path.append(parent_dir)
-
 from minio_client.minio_client import MinioClient
 
 load_dotenv()
