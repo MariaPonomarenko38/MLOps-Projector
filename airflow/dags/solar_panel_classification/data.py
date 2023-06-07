@@ -50,5 +50,7 @@ def process_data(path_to_args: Path,interim_path_data, processed_path_data, **co
     save_in_h5(processed_path_data + f'{last_folder_name}_features.h5', features)
 
 def upload_data(bucket_name, file_name, file_path, **context):
-    minio_client = MinioClient(Variable.get("access_key"), Variable.get("secret_key"),"172.17.0.1:9000/")
-    minio_client.upload_file(file_name, bucket_name, file_path, context['task_instance'].xcom_pull(task_ids='load_data'))
+    is_drift = context['task_instance'].xcom_pull(task_ids='detect_drift')
+    if is_drift:
+        minio_client = MinioClient(Variable.get("access_key"), Variable.get("secret_key"),"172.17.0.1:9000/")
+        minio_client.upload_file(file_name, bucket_name, file_path, context['task_instance'].xcom_pull(task_ids='load_data'))

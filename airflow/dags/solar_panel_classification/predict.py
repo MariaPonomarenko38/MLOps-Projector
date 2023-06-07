@@ -36,7 +36,8 @@ def predict(inference_images_path: Path, model_load_path: Path, result_path: Pat
     inference_images = load_h5(inference_images_path + f'{last_folder_name}_features.h5')
     predictor = Predictor(model_load_path)
     outputs = predictor.predict(inference_images)
-    find_percentage_of_clear(outputs, number_of_images_per_panel, result_path)
+    if is_drift:
+        find_percentage_of_clear(outputs, number_of_images_per_panel, result_path)
 
 def detect_drift(inference_images_path: Path, detector_path: Path, **context):
     last_folder_name = context['task_instance'].xcom_pull(task_ids='load_data')

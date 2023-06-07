@@ -1,3 +1,7 @@
+from minio import Minio
+from datetime import datetime
+
+
 class MinioClient:
     def __init__(self, access_key, secret_key, endpoint) -> None:
         client = Minio(endpoint, access_key=access_key, secret_key=secret_key, secure=False)
