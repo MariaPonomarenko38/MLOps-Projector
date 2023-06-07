@@ -1,0 +1,17 @@
+{
+    "layers": 50,
+    "input_shape": [7, 7, 1024],
+    "activation": "ReLU",
+    "activation1": "softmax",
+    "optimizer": "adam",
+    "loss": "sparse_categorical_crossentropy",
+    "batch_size": 64,
+    "epochs": 5,
+    "model_name_save": "model1",
+    "image_size": [224, 224],
+    "number_of_classes": 2,
+    "mobile_net_input_shape": [224,224,3],
+    "class_names": ["dusty", "clean"],
+    "use_wandb": true, 
+    "wandb_project": "solar panels classification"
+}
