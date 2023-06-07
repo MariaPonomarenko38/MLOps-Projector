@@ -1,12 +1,15 @@
-from tensorflow.keras.preprocessing.image import ImageDataGenerator   
-import tensorflow as tf    
+import pandas as pd
+from alibi_detect.cd import MMDDrift
+from alibi_detect.saving import save_detector, load_detector
+import pickle
 import wandb
 from wandb.keras import WandbCallback
-import wandb
+from tensorflow.keras.preprocessing.image import ImageDataGenerator   
+import tensorflow as tf    
 import logging
-from image_classification.utils import load_h5, get_args, setup_logger, compute_metrics 
-import logging
-import json
+from utils import load_h5, get_args, setup_logger, compute_metrics 
+from pathlib import Path
+import numpy as np
 
 SWEEP_PROJECT = 'solar_panels'
 
@@ -54,8 +57,11 @@ def train(config_path):
     else:
         model.fit(datagen.flow(train_features, train_labels, batch_size=args["batch_size"], shuffle=True), 
                                                     epochs=args["epochs"], validation_data=(test_features, test_labels))
-    model.save(args["model_path"] + args["model_name_save"])
+    model.save(args["model_path"])
     
+    mmd_drift_detector = MMDDrift(train_features, backend="tensorflow", p_val=.01)
+    save_detector(mmd_drift_detector, args["detector_path"])
+
     train_metrics = compute_metrics(model.predict(train_features), train_labels)
     val_metrics = compute_metrics(model.predict(test_features), test_labels)
 
