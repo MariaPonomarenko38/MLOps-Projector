@@ -19,15 +19,16 @@ def compute_metrics(predictions, labels):
         "accuracy": accuracy_score(y_true=labels, y_pred=preds),
     }
 
-def upload_to_registry(model_name, model_path):
-    with wandb.init() as _:
+def upload_to_registry(project_name, model_name, model_path, detector_path):
+    with wandb.init(project=project_name) as _:
         art = wandb.Artifact(model_name, type="model")
-        art.add_file(model_path)
+        art.add_dir(model_path)
         art.add_file("../conf/config.json")
+        art.add_dir(detector_path)
         wandb.log_artifact(art)
 
-def load_from_registry(model_name, model_path):
-    with wandb.init() as run:
+def load_from_registry(project_name, model_name, model_path):
+    with wandb.init(project=project_name) as run:
         artifact = run.use_artifact(model_name, type="model")
         artifact_dir = artifact.download(root=model_path)
         print(f"{artifact_dir}")
@@ -54,6 +55,3 @@ def load_h5(path):
         dset = f['myarray']
         arr = np.array(dset)
     return arr
-
-if __name__ == '__main__':
-    load_from_registry('../conf/config.json')

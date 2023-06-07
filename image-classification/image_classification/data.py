@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 import json
 from sklearn.utils import shuffle
-from image_classification.utils import load_h5, save_in_h5, get_args 
+from utils import load_h5, save_in_h5, get_args 
 from minio_client.minio_client import MinioClient
 
 load_dotenv()
@@ -32,19 +32,21 @@ def load_inference_data(path_to_args, bucket_name):
     images = images / 255.0
     save_in_h5(args["interim_path_data"] + bucket_name + "_images.h5", images)
 
-def load_training_data(path_to_args, bucket_name, folder):
+def load_training_data(path_to_args, bucket_name):
     args = get_args(path_to_args)
     minio_client = MinioClient(os.getenv("MINIO_ACCESS_KEY"), os.getenv("MINIO_SECRET_KEY"),os.getenv("MINIO_URL"))
-    objects = minio_client.get_data(bucket_name, folder)
+    folders = args["class_names"]
     images = []
     labels = []
-    for obj in objects:
-        image = preprocessing(minio_client, bucket_name, obj, tuple(args['image_size']))
-        images.append(image)
-        if 'dirty' in obj.object_name:
-            labels.append(0)
-        elif 'clean' in obj.object_name:
-            labels.append(1)
+    for folder in folders:
+        objects = minio_client.get_data(bucket_name, folder)    
+        for obj in objects:
+            image = preprocessing(minio_client, bucket_name, obj, tuple(args['image_size']))
+            images.append(image)
+            if 'dirty' in obj.object_name:
+                labels.append(0)
+            elif 'clean' in obj.object_name:
+                labels.append(1)
     images = np.array(images, dtype = 'float32')
     images = images / 255.0
     labels = np.array(labels, dtype = 'int32') 
@@ -62,5 +64,4 @@ def process_data(path_to_args, interim_filename, processed_filename):
     images = load_h5(args["interim_path_data"] + interim_filename)
 
     features = get_features(args, images)
-
     save_in_h5(args["processed_path_data"] + processed_filename, features)
