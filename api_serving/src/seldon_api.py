@@ -25,9 +25,15 @@ class Score:
                 self.fn[true] += 1
         
         for class_name in self.tp.keys():
-            self.precision[class_name] = self.tp[class_name] / (self.tp[class_name] + self.fp[class_name]) if (self.tp[class_name] + self.fp[class_name]) != 0 else 0
-            self.recall[class_name] = self.tp[class_name] / (self.tp[class_name] + self.fn[class_name]) if (self.tp[class_name] + self.fn[class_name]) != 0 else 0
-            self.f1[class_name] = 2 * (self.precision[class_name] * self.recall[class_name]) / (self.precision[class_name] + self.recall[class_name]) if (self.precision[class_name] + self.recall[class_name]) != 0 else 0
+            self.precision[class_name] = 0
+            self.recall[class_name] = 0
+            self.f1[class_name] = 0
+            if (self.tp[class_name] + self.fp[class_name]) != 0:
+                self.precision[class_name] = self.tp[class_name] / (self.tp[class_name] + self.fp[class_name]) 
+            if (self.tp[class_name] + self.fp[class_name]) != 0:
+                self.recall[class_name] = self.tp[class_name] / (self.tp[class_name] + self.fn[class_name]) 
+            if (self.precision[class_name] + self.recall[class_name]) != 0:
+                self.f1[class_name] = 2 * (self.precision[class_name] * self.recall[class_name]) / (self.precision[class_name] + self.recall[class_name])
         
         tp_sum = sum(self.tp.values()) 
         self.accuracy = tp_sum / (tp_sum + sum(self.fp.values()))
