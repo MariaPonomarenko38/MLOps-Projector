@@ -12,7 +12,7 @@ spec:
   - componentSpecs:
     - spec:
         containers:
-        - image: mariaponomarenko/seldon-api-final:latest
+        - image: mariaponomarenko/seldon-api-final-1:latest
           name: classifier
           env:
           - name: GUNICORN_THREADS
